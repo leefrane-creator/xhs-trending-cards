@@ -144,6 +144,35 @@
     width: 14px; height: 14px; min-width: 14px; border-radius: 50%;
     background: var(--theme); margin-top: 12px; flex-shrink: 0;
   }
+  .screenshot-area {
+    border-radius: 16px; overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: #0d1117; position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    max-height: 320px;
+  }
+  .screenshot-area img {
+    width: 100%; max-height: 320px; display: block; object-fit: cover; object-position: top;
+  }
+  .screenshot-label {
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(0,0,0,0.65); color: #e2e8f0;
+    padding: 4px 14px; border-radius: 12px;
+    font-size: 18px; font-weight: 600; backdrop-filter: blur(4px);
+  }
+  .cover-screenshot {
+    border-radius: 20px; overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    position: relative;
+    max-height: 380px;
+  }
+  .cover-screenshot img {
+    width: 100%; max-height: 380px; display: block; object-fit: cover; object-position: top;
+  }
+  .cover-screenshot .screenshot-label {
+    font-size: 20px; top: 12px; right: 14px;
+  }
 </style>
 </head>
 <body>
@@ -232,6 +261,10 @@
         </div>
       </div>
     </div>
+    <div class="cover-screenshot">
+      <img src="ppt_screenshots/Cover_封面.png" alt="封面预览">
+      <div class="screenshot-label">效果预览</div>
+    </div>
     <div class="cover-footer">
       <div class="footer-text">数据来源：GitHub Trending <span>2026.04</span></div>
     </div>
@@ -270,6 +303,10 @@
         <div class="stat-value" style="color:#6bcb77;">PDF/PPTX</div>
         <div class="stat-label">导出格式</div>
       </div>
+    </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/01_Slidev.png" alt="Slidev案例">
+      <div class="screenshot-label">案例展示</div>
     </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
@@ -324,6 +361,10 @@
         <div class="stat-label">部署方式</div>
       </div>
     </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/02_Presenton.png" alt="Presenton案例">
+      <div class="screenshot-label">案例展示</div>
+    </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
       <div class="sec-body">开源AI演示生成器和API，Gamma/Beautiful AI替代品。支持OpenAI、Gemini、Anthropic、Ollama等多模型，可完全自托管，数据不出本地。</div>
@@ -376,6 +417,10 @@
         <div class="stat-value" style="color:#ff6b6b;">$0.08</div>
         <div class="stat-label">每页成本</div>
       </div>
+    </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/03_ppt-master.png" alt="ppt-master案例">
+      <div class="screenshot-label">案例展示</div>
     </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
@@ -430,6 +475,10 @@
         <div class="stat-label">运行模式</div>
       </div>
     </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/04_PPTAgent.png" alt="PPTAgent案例">
+      <div class="screenshot-label">案例展示</div>
+    </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
       <div class="sec-body">Agentic框架驱动的PPT生成系统。论文被EMNLP 2025接收，采用两阶段编辑方法，支持离线模式，MCP服务器支持。</div>
@@ -483,6 +532,10 @@
         <div class="stat-label">支持特效</div>
       </div>
     </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/05_AiPPT.png" alt="AiPPT案例">
+      <div class="screenshot-label">案例展示</div>
+    </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
       <div class="sec-body">商用级AI生成PPT方案，支持主题/文件/网址生成。独有PPT⇄JSON双向转换，支持原生图表、动画、3D特效，自定义模板。</div>
@@ -535,6 +588,10 @@
         <div class="stat-value" style="color:#a78bfa;">Beamer</div>
         <div class="stat-label">输出格式</div>
       </div>
+    </div>
+    <div class="screenshot-area">
+      <img src="ppt_screenshots/06_Auto-Slides.png" alt="Auto-Slides案例">
+      <div class="screenshot-label">案例展示</div>
     </div>
     <div class="section-card">
       <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>

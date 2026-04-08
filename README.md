@@ -13,12 +13,18 @@
 
 ## 效果预览
 
-### 案例1: GitHub AI 开源项目 Top5
-6张卡片（1封面 + 5详情），深色科技风渐变主题色
+### 案例1: AI PPT 生成工具 Top6
+7张卡片（1封面 + 6详情），暖色渐变风格
 
-| 封面 | OpenClaw | AutoGPT | Ollama | Langflow | Dify |
-|------|----------|---------|--------|----------|------|
-| ![cover](examples/01-github-ai-trending-top5/preview.png) | - | - | - | - | - |
+<p align="center">
+  <img src="examples/01-github-ai-trending-top5/Cover_封面.png" width="220" alt="封面">
+  <img src="examples/01-github-ai-trending-top5/01_Slidev.png" width="220" alt="Slidev">
+  <img src="examples/01-github-ai-trending-top5/02_Presenton.png" width="220" alt="Presenton">
+  <img src="examples/01-github-ai-trending-top5/03_ppt-master.png" width="220" alt="ppt-master">
+  <img src="examples/01-github-ai-trending-top5/04_PPTAgent.png" width="220" alt="PPTAgent">
+  <img src="examples/01-github-ai-trending-top5/05_AiPPT.png" width="220" alt="AiPPT">
+  <img src="examples/01-github-ai-trending-top5/06_Auto-Slides.png" width="220" alt="Auto-Slides">
+</p>
 
 - 卡片 HTML: [examples/01-github-ai-trending-top5/cards.html](examples/01-github-ai-trending-top5/cards.html)
 - 发布文案: [examples/01-github-ai-trending-top5/copywriting.md](examples/01-github-ai-trending-top5/copywriting.md)
@@ -29,8 +35,8 @@
 - 卡片 HTML: [examples/02-github-2026-top10-tools/cards.html](examples/02-github-2026-top10-tools/cards.html)
 - 发布文案: [examples/02-github-2026-top10-tools/copywriting.md](examples/02-github-2026-top10-tools/copywriting.md)
 
-### 案例3: AI PPT 生成工具 Top6
-7张卡片（1封面 + 6详情），暖色渐变风格
+### 案例3: GitHub AI 开源项目 Top5
+6张卡片（1封面 + 5详情），深色科技风渐变主题色
 
 - 卡片 HTML: [examples/03-ai-ppt-tools-top6/cards.html](examples/03-ai-ppt-tools-top6/cards.html)
 - 发布文案: [examples/03-ai-ppt-tools-top6/copywriting.md](examples/03-ai-ppt-tools-top6/copywriting.md)
