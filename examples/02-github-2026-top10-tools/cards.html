@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1242, initial-scale=1.0">
+<title>GitHub 2026最火爆的10款开源工具 - 小红书卡片</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex; flex-direction: column;
+    align-items: center; padding: 30px 20px 60px;
+    font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+    gap: 36px;
+  }
+  /* ===== Control Bar ===== */
+  .controls {
+    position: sticky; top: 0; z-index: 1000;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 16px; padding: 18px 24px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    box-shadow: 0 8px 32px rgba(0,200,255,0.15);
+    border: 1px solid rgba(0,200,255,0.15); width: 1242px;
+  }
+  .controls h2 {
+    font-size: 17px; font-weight: 700;
+    background: linear-gradient(90deg, #00d4ff, #7c3aed);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+  .btn {
+    padding: 10px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-download-all { background: linear-gradient(135deg, #00d4ff, #7c3aed); color: #fff; box-shadow: 0 4px 20px rgba(0,212,255,0.3); }
+  .btn-download-all:hover { transform: translateY(-2px); }
+  .btn-single { background: rgba(255,255,255,0.08); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+  .btn-single:hover { background: rgba(0,212,255,0.15); }
+
+  /* ===== Card Container ===== */
+  .card-wrapper { position: relative; }
+
+  /* ★★★ CSS Grid 3-Row Layout (Core) ★★★ */
+  .card {
+    width: 1242px; height: 1660px;
+    background: #0f172a; border-radius: 24px; overflow: hidden;
+    display: grid;
+    grid-template-rows: 12px 1fr auto;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+  }
+
+  /* Row 1: Top theme bar - fixed 12px */
+  .top-bar { width: 100%; height: 12px; background: var(--theme); }
+
+  /* Row 2: Main area - space-between for even distribution */
+  .main {
+    display: flex; flex-direction: column;
+    padding: 44px 56px 10px 56px;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  /* Row 3: CTA button area - natural height */
+  .btn-area { padding: 8px 56px 40px 56px; }
+  .cta-btn {
+    width: 100%; height: 86px;
+    background: var(--theme); color: #fff;
+    font-size: 44px; font-weight: 700;
+    border: none; border-radius: 43px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    letter-spacing: 4px;
+  }
+
+  /* ========== Cover Card ========== */
+  .cover-header { text-align: center; }
+  .cover-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00d4ff, #7c3aed);
+    color: #fff; padding: 12px 32px; border-radius: 30px;
+    font-size: 28px; font-weight: 800; letter-spacing: 3px; margin-bottom: 18px;
+    box-shadow: 0 4px 24px rgba(0,212,255,0.35);
+  }
+  .cover-title {
+    font-size: 88px; font-weight: 800; line-height: 1.15;
+    background: linear-gradient(90deg, #00d4ff, #a78bfa, #f472b6, #00d4ff);
+    background-size: 300% 100%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .cover-subtitle { font-size: 38px; color: #94a3b8; letter-spacing: 2px; }
+
+  .project-list { display: flex; flex-direction: column; gap: 16px; }
+  .project-item {
+    display: flex; align-items: center; gap: 20px;
+    background: #1e293b; border-radius: 18px; padding: 22px 28px;
+    border-left: 6px solid var(--item-color, #00d4ff);
+  }
+  .project-rank {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; flex-shrink: 0;
+  }
+  .rank-1 { background: linear-gradient(135deg,#ffd700,#ffaa00); color: #000; }
+  .rank-2 { background: linear-gradient(135deg,#c0c0c0,#a0a0a0); color: #000; }
+  .rank-3 { background: linear-gradient(135deg,#cd7f32,#b8860b); color: #fff; }
+  .rank-other { background: #334155; color: #94a3b8; }
+  .project-info { flex: 1; min-width: 0; }
+  .project-name { font-size: 34px; font-weight: 800; color: #e2e8f0; }
+  .project-desc { font-size: 24px; color: #94a3b8; margin-top: 4px; }
+  .project-stars { font-size: 30px; font-weight: 800; flex-shrink: 0; white-space: nowrap; }
+  .stars-badge {
+    display: inline-block; padding: 8px 20px; border-radius: 24px;
+    font-size: 26px; font-weight: 800;
+  }
+  .cover-footer { text-align: center; padding-top: 18px; border-top: 1px solid #1e293b; }
+  .footer-text { font-size: 26px; color: #64748b; }
+  .footer-text span { color: #00d4ff; font-weight: 700; }
+
+  /* ========== Detail Card ========== */
+  .detail-header { text-align: center; }
+  .detail-rank {
+    display: inline-block; padding: 10px 32px; border-radius: 30px;
+    font-size: 28px; font-weight: 900; letter-spacing: 2px; margin-bottom: 16px;
+  }
+  .detail-project-name {
+    font-size: 90px; font-weight: 800; line-height: 1.08; word-break: break-word;
+    color: var(--theme);
+  }
+  .detail-url { font-size: 26px; color: #64748b; margin-top: 8px; font-family: 'SF Mono', Consolas, monospace; }
+  .detail-tag-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .detail-tag {
+    padding: 8px 22px; border-radius: 24px; font-size: 24px;
+    font-weight: 600; border: 1px solid; background: rgba(255,255,255,0.04);
+  }
+
+  .stats-row {
+    display: flex; justify-content: center; gap: 40px;
+    background: #1e293b; border-radius: 20px; padding: 26px 0;
+  }
+  .stat-item { text-align: center; }
+  .stat-value { font-size: 46px; font-weight: 900; }
+  .stat-label { font-size: 24px; color: #94a3b8; margin-top: 4px; }
+
+  .section-card {
+    background: #1e293b; border-radius: 20px; padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .sec-head { display: flex; align-items: center; gap: 14px; }
+  .sec-bar { width: 6px; height: 36px; background: var(--theme); border-radius: 3px; flex-shrink: 0; }
+  .sec-title { font-size: 38px; font-weight: 700; color: var(--theme); }
+  .section-card.gold .sec-bar { background: #fbbf24; }
+  .section-card.gold .sec-title { color: #fbbf24; }
+  .section-card.purple .sec-bar { background: #a78bfa; }
+  .section-card.purple .sec-title { color: #a78bfa; }
+  .sec-body { font-size: 30px; color: #cbd5e1; line-height: 1.55; padding-left: 20px; }
+
+  .feature-list { display: flex; flex-direction: column; gap: 14px; padding-left: 20px; }
+  .feature-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    font-size: 28px; line-height: 1.5; color: #e2e8f0;
+  }
+  .feature-dot {
+    width: 14px; height: 14px; min-width: 14px; border-radius: 50%;
+    background: var(--theme); margin-top: 12px; flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== CONTROL BAR ====== -->
+<div class="controls" id="ctrlBar">
+  <h2>GitHub 2026 最火爆的10款开源工具 | 小红书知识卡片包</h2>
+  <button class="btn btn-download-all" onclick="downloadAll()">一键下载全部 11 张卡片</button>
+  <button class="btn btn-single" onclick="downloadCard('card0')">下载封面</button>
+  <button class="btn btn-single" onclick="downloadCard('card1')">01 OpenClaw</button>
+  <button class="btn btn-single" onclick="downloadCard('card2')">02 React</button>
+  <button class="btn btn-single" onclick="downloadCard('card3')">03 TensorFlow</button>
+  <button class="btn btn-single" onclick="downloadCard('card4')">04 AutoGPT</button>
+  <button class="btn btn-single" onclick="downloadCard('card5')">05 n8n</button>
+  <button class="btn btn-single" onclick="downloadCard('card6')">06 VS Code</button>
+  <button class="btn btn-single" onclick="downloadCard('card7')">07 Flutter</button>
+  <button class="btn btn-single" onclick="downloadCard('card8')">08 Linux</button>
+  <button class="btn btn-single" onclick="downloadCard('card9')">09 Oh My Zsh</button>
+  <button class="btn btn-single" onclick="downloadCard('card10')">10 Claw Code</button>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 0: COVER                              -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card0" style="--theme: linear-gradient(90deg, #00d4ff, #7c3aed);">
+  <div class="top-bar" style="background: linear-gradient(90deg, #00d4ff, #7c3aed, #f472b6, #fbbf24);"></div>
+  <div class="main">
+    <div class="cover-header">
+      <div class="cover-badge">GitHub Trending · 2026年度盘点</div>
+      <div class="cover-title">2026年最火爆的<br>10款开源工具项目</div>
+      <div class="cover-subtitle">开发者必备神器 · 从AI到框架全覆盖</div>
+    </div>
+    <div class="project-list">
+      <div class="project-item" style="--item-color: #ffd700;">
+        <div class="project-rank rank-1">1</div>
+        <div class="project-info">
+          <div class="project-name">OpenClaw</div>
+          <div class="project-desc">个人AI助手，任何平台运行</div>
+        </div>
+        <div class="project-stars"><span class="stars-badge" style="background:#fef3c7;color:#92400e;">★ 35.1W</span></div>
+      </div>
+      <div class="project-item" style="--item-color: #c0c0c0;">
+        <div class="project-rank rank-2">2</div>
+        <div class="project-info">
+          <div class="project-name">React</div>
+          <div class="project-desc">Web与原生UI开发库</div>
+        </div>
+        <div class="project-stars"><span class="stars-badge" style="background:#fef3c7;color:#92400e;">★ 24.4W</span></div>
+      </div>
+      <div class="project-item" style="--item-color: #cd7f32;">
+        <div class="project-rank rank-3">3</div>
+        <div class="project-info">
+          <div class="project-name">TensorFlow</div>
+          <div class="project-desc">端到端机器学习平台</div>
+        </div>
+        <div class="project-stars"><span class="stars-badge" style="background:#fef3c7;color:#92400e;">★ 19.5W</span></div>
+      </div>
+      <div class="project-item" style="--item-color: #00d4ff;">
+        <div class="project-rank rank-other">4</div>
+        <div class="project-info">
+          <div class="project-name">AutoGPT</div>
+          <div class="project-desc">自主AI智能体框架</div>
+        </div>
+        <div class="project-stars"><span class="stars-badge" style="background:#fef3c7;color:#92400e;">★ 18.3W</span></div>
+      </div>
+      <div class="project-item" style="--item-color: #a78bfa;">
+        <div class="project-rank rank-other">5</div>
+        <div class="project-info">
+          <div class="project-name">n8n</div>
+          <div class="project-desc">工作流自动化平台</div>
+        </div>
+        <div class="project-stars"><span class="stars-badge" style="background:#fef3c7;color:#92400e;">★ 18.3W</span></div>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <div class="footer-text">完整榜单共 <span>10</span> 款工具 · 数据来源 GitHub 2026.04</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn" style="background: linear-gradient(90deg, #00d4ff, #7c3aed);">GitHub 2026 年度十大开源工具</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 1: OpenClaw (#1)                       -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card1" style="--theme: #00d4ff;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: linear-gradient(135deg,#ffd700,#ffaa00); color: #000;">TOP 01</div>
+      <div class="detail-project-name">OpenClaw</div>
+      <div class="detail-url">github.com/openclaw/openclaw</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#00d4ff;border-color:rgba(0,212,255,0.4);">AI助手</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">TypeScript</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">跨平台</span>
+        <span class="detail-tag" style="color:#fbbf24;border-color:rgba(251,191,36,0.4);">开源免费</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">351,380</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#00d4ff;">70,686</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#6 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">OpenClaw 是一款革命性的个人 AI 助手，采用龙虾（Claw）作为品牌形象。它的核心理念是让每个人都拥有完全自主的 AI 助手，支持在任何操作系统、任何平台上运行。用户拥有自己的数据主权，不依赖任何中心化服务。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>数据隐私至上</b> — 所有数据本地处理，你的AI你做主</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>跨平台无缝</b> — Windows/macOS/Linux全兼容</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>TypeScript驱动</b> — 现代技术栈，开发者友好</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>社区活跃</b> — 7万+Fork，全球开发者共建</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">关注数据隐私的开发者、需要本地AI助手的个人用户、想搭建专属AI系统的技术爱好者、以及对中心化AI服务持保留态度的用户。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#01 OpenClaw - 你的个人AI助手</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 2: React (#2)                         -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card2" style="--theme: #61dafb;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: linear-gradient(135deg,#c0c0c0,#a0a0a0); color: #000;">TOP 02</div>
+      <div class="detail-project-name">React</div>
+      <div class="detail-url">github.com/facebook/react</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#61dafb;border-color:rgba(97,218,251,0.4);">前端框架</span>
+        <span class="detail-tag" style="color:#fbbf24;border-color:rgba(251,191,36,0.4);JavaScript</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">声明式UI</span>
+        <span class="detail-tag" style="color:#f472b6;border-color:rgba(244,114,182,0.4);">Meta出品</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">244,476</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#61dafb;">50,989</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#10 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">React 是由 Meta（Facebook）开发的用于构建 Web 和原生用户界面的 JavaScript 库。它引入了组件化和虚拟DOM的革命性概念，彻底改变了前端开发方式。如今 React 生态系统已涵盖 Web、移动端、桌面应用甚至 VR 开发。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>组件化思维</b> — UI拆分为可复用组件，开发效率翻倍</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>虚拟DOM</b> — 高效渲染机制，性能表现卓越</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>生态庞大</b> — Next.js/Redux/MUI等无数优秀库</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>跨端能力</b> — React Native一套代码多端运行</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">前端工程师、全栈开发者、需要构建复杂单页应用（SPA）的团队、以及希望同时覆盖Web和移动端的开发者。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#02 React - 前端开发的基石</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 3: TensorFlow (#3)                    -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card3" style="--theme: #ff6f00;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: linear-gradient(135deg,#cd7f32,#b8860b); color: #fff;">TOP 03</div>
+      <div class="detail-project-name">TensorFlow</div>
+      <div class="detail-url">github.com/tensorflow/tensorflow</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#ff6f00;border-color:rgba(255,111,0,0.4);">机器学习</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">深度学习</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">C++</span>
+        <span class="detail-tag" style="color:#f472b6;border-color:rgba(244,114,182,0.4);">Google出品</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">194,575</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#ff6f00;">75,258</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#14 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">TensorFlow 是 Google 推出的开源端到端机器学习平台。从研究原型到生产部署，TensorFlow 提供了完整的工具链。支持深度神经网络、自然语言处理、计算机视觉等众多AI领域，是全球使用最广泛的 ML 框架之一。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>Google背书</b> — 科技巨头维护，企业级可靠性</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>全面覆盖</b> — 从训练到部署一站式解决</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>TF Lite</b> — 移动端和嵌入式设备推理支持</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>TPU加速</b> — Google专用硬件加速训练</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">AI研究人员、机器学习工程师、数据科学家、需要在生产环境部署ML模型的企业团队、以及从事深度学习相关研究的学者。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#03 TensorFlow - Google的ML利器</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 4: AutoGPT (#4)                       -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card4" style="--theme: #22c55e;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 04</div>
+      <div class="detail-project-name">AutoGPT</div>
+      <div class="detail-url">github.com/Significant-Gravitas/AutoGPT</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#22c55e;border-color:rgba(34,197,94,0.4);">AI Agent</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">自主智能体</span>
+        <span class="detail-tag" style="color:#fbbf24;border-color:rgba(251,191,36,0.4);">Python</span>
+        <span class="detail-tag" style="color:#f472b6;border-color:rgba(244,114,182,0.4);">LLM</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">183,228</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#22c55e;">46,217</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#17 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">AutoGPT 是划时代的自主 AI Agent 框架，愿景是让人人都能用上和构建 AI。它能将复杂任务分解为子目标，自动调用LLM（如GPT、Claude、Llama）进行推理和执行，实现近乎全自动的任务完成。代表了 AI Agent 方向的最前沿探索。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>自主决策</b> — 无需人工干预自动分解执行任务链</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>模型无关</b> — 支持GPT/Claude/Llama等多模型接入</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>工具集成</b> — 浏览器搜索、代码执行、文件操作全覆盖</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>Agent范式</b> — 引领2024-2025 AI Agent开发浪潮</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">AI开发者、想要搭建自动化工作流的技术人员、对Agent架构感兴趣的研究者、以及希望通过AI自动化提升效率的个人和团队。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#04 AutoGPT - 自主AI Agent先驱</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 5: n8n (#5)                           -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card5" style="--theme: #ea580c;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 05</div>
+      <div class="detail-project-name">n8n</div>
+      <div class="detail-url">github.com/n8n-io/n8n</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#ea580c;border-color:rgba(234,88,12,0.4);">工作流自动化</span>
+        <span class="detail-tag" style="color:#00d4ff;border-color:rgba(0,212,255,0.4);">低代码</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">TypeScript</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">MCP协议</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">182,905</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#ea580c;">56,585</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#18 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">n8n 是一款公平代码（Fair-code）的工作流自动化平台，内置原生AI能力。通过可视化的节点编排界面连接400+第三方服务，支持自定义代码扩展。可选择云端或自托管部署，是 Zapier 和 Make 的强大开源替代方案。最新版已支持 MCP 协议。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>400+集成</b> — 几乎所有主流SaaS平台开箱即用</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>可视化编排</b> — 拖拽式流程设计，非程序员也能用</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>AI原生</b> — 内置AI节点，智能处理文本和数据</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>自托管优先</b> — 数据完全掌控，合规无忧</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">运营人员、产品经理、需要自动化业务流程的小团队、追求数据主权的自托管爱好者、以及寻找Zapier替代方案的创业者。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#05 n8n - 开源工作流自动化之王</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 6: VS Code (#6)                       -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card6" style="--theme: #007acc;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 06</div>
+      <div class="detail-project-name">VS Code</div>
+      <div class="detail-url">github.com/microsoft/vscode</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#007acc;border-color:rgba(0,122,204,0.4);">代码编辑器</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">TypeScript</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">Electron</span>
+        <span class="detail-tag" style="color:#f472b6;border-color:rgba(244,114,182,0.4);">Microsoft</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">183,561</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#007acc;">39,088</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#16 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">Visual Studio Code 是 Microsoft 出品的轻量级但功能强大的源代码编辑器。内置 Git 支持、智能代码补全、调试功能和丰富的扩展生态系统。支持几乎所有编程语言，已成为全球最受欢迎的开发工具，市场占有率遥遥领先。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>扩展丰富</b> — 超过4万款插件，打造专属IDE</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>轻量快速</b> — 启动秒开，内存占用低</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>Remote SSH</b> — 远程开发体验如同本地</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>Copilot集成</b> — AI辅助编程的原生搭档</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">所有程序员（无论什么语言）、前端开发者、后端工程师、DevOps运维人员、以及需要远程开发能力的团队成员。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#06 VS Code - 程序员最爱的编辑器</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 7: Flutter (#7)                       -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card7" style="--theme: #42a5f5;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 07</div>
+      <div class="detail-project-name">Flutter</div>
+      <div class="detail-url">github.com/flutter/flutter</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#42a5f5;border-color:rgba(66,165,245,0.4);">跨平台</span>
+        <span class="detail-tag" style="color:#00d4ff;border-color:rgba(0,212,255,0.4);">移动开发</span>
+        <span class="detail-tag" style="color:#fbbf24;border-color:rgba(251,191,36,0.4);">Dart语言</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">Google</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">175,870</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#42a5f5;">30,229</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#20 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">Flutter 是 Google 推出的跨平台 UI 工具套件，用一套 Dart 代码库即可高效构建精美、编译型应用，覆盖移动端（iOS/Android）、Web、桌面（Windows/macOS/Linux）乃至嵌入式设备。采用自渲染引擎 Skia，确保各端UI一致性。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>一套代码六端运行</b> — iOS/Android/Web/Windows/macOS/Linux</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>热重载</b> — 代码修改毫秒级预览，开发体验极致</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>自渲染引擎</b> — UI在各平台保持像素级一致</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>性能接近原生</b> — AOT编译，流畅度媲美Native</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">移动应用开发者、独立开发者/创业团队（人力有限需多端覆盖）、Web开发者转型移动端、以及追求一致UI体验的设计师+开发者组合。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#07 Flutter - 一套代码全平台覆盖</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 8: Linux (#8)                         -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card8" style="--theme: #fcc624;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 08</div>
+      <div class="detail-project-name">Linux Kernel</div>
+      <div class="detail-url">github.com/torvalds/linux</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#fcc624;border-color:rgba(252,198,36,0.4);">操作系统</span>
+        <span class="detail-tag" style="color:#ef4444;border-color:rgba(239,68,68,0.4);">C语言</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">内核</span>
+        <span class="detail-tag" style="color:#94a3b8;border-color:rgba(148,163,184,0.4);">Linus</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">227,435</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#fcc624;">61,516</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#11 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">Linux 内核是由 Linus Torvalds 创建并维护的开源操作系统内核。它是世界上最大的协作软件项目之一，支撑着从 Android 手机到超级计算机、从云服务器到物联网设备的整个数字世界。全球超过90%的云服务器和绝大部分超算都在运行Linux。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>数字世界基石</b> — Android、服务器、超算全部基于它</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>完全开源</b> — GPL协议，自由使用和修改</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>社区庞大</b> — 数千名顶级开发者持续贡献</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>稳定可靠</b> — 运行数年不重启是常态</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">系统程序员、嵌入式开发者、运维工程师、云计算从业者、操作系统研究者、以及每一个想要理解计算机底层原理的技术人。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#08 Linux - 数字世界的地基</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 9: Oh My Zsh (#9)                     -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card9" style="--theme: #f58025;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 09</div>
+      <div class="detail-project-name">Oh My Zsh</div>
+      <div class="detail-url">github.com/ohmyzsh/ohmyzsh</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#f58025;border-color:rgba(245,128,37,0.4);">终端增强</span>
+        <span class="detail-tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.4);">Shell框架</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">效率工具</span>
+        <span class="detail-tag" style="color:#94a3b8;border-color:rgba(148,163,184,0.4);">社区驱动</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">186,013</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#f58025;">26,336</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#15 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">Oh My Zsh 是一个社区驱动的 Zsh Shell 配置管理框架，拥有2400+贡献者。提供300多个可选插件（Git、Docker、Node等）、140多款精美主题和自动更新工具。一行命令即可安装，让你的终端既美观又高效，是提升命令行生产力的事实标准。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>300+插件</b> — Git状态、Docker管理、语法高亮应有尽有</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>140+主题</b> — Powerlevel10k等爆款主题颜值爆表</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>一键安装</b> — 一行curl命令搞定全部配置</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>效率倍增</b> — 智能补全、别名、目录跳转省时省力</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">每天使用终端的开发者、Mac/Linux用户、DevOps工程师、系统管理员、以及想让命令行变得更好看更好用的所有人。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#09 Oh My Zsh - 终端颜值天花板</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD 10: Claw Code (#10)                   -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card10" style="--theme: #ec4899;">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="background: #334155; color: #94a3b8;">TOP 10</div>
+      <div class="detail-project-name">Claw Code</div>
+      <div class="detail-url">github.com/ultraworkers/claw-code</div>
+      <div class="detail-tag-row">
+        <span class="detail-tag" style="color:#ec4899;border-color:rgba(236,72,153,0.4);">Rust</span>
+        <span class="detail-tag" style="color:#fbbf24;border-color:rgba(251,191,36,0.4);">AI编程</span>
+        <span class="detail-tag" style="color:#00d4ff;border-color:rgba(0,212,255,0.4);">极速增长</span>
+        <span class="detail-tag" style="color:#34d399;border-color:rgba(52,211,153,0.4);">新锐项目</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value" style="color:#ffd700;">176,725</div><div class="stat-label">Stars</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#ec4899;">105,224</div><div class="stat-label">Forks</div></div>
+      <div class="stat-item"><div class="stat-value" style="color:#a78bfa">#19 全球</div><div class="stat-label">总排名</div></div>
+    </div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">Claw Code 是 GitHub 历史上增速最快的仓库之一，突破 10 万 Star 仅用了极短时间。项目基于 Rust 语言构建，使用 oh-my-codex 作为底层引擎，定位为下一代 AI 编程助手。 Fork 数超过 10 万，展现了空前的社区参与热度。</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>历史级增速</b> — 最快突破100K Star的Repo之一</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>Rust编写</b> — 内存安全+极致性能</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>AI编程新范式</b> — 结合大模型的代码生成工具</div>
+        <div class="feature-item"><div class="feature-dot" style="background:#fbbf24;"></div><b>超高参与度</b> — 10万+Fork，社区热情空前</div>
+      </div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">对新技术敏感的早期采用者、Rust 语言爱好者、关注AI辅助编程方向的开发者、喜欢尝试前沿工具的技术探险家。</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">#10 Claw Code - 历史级增速的AI编程工具</div>
+  </div>
+</div>
+</div>
+
+
+<script>
+// ===== DOWNLOAD LOGIC (html2canvas + precision crop) =====
+const cardIds = ['card0','card1','card2','card3','card4','card5','card6','card7','card8','card9','card10'];
+const cardNames = {
+  'card0': 'Cover',
+  'card1': '01_OpenClaw',
+  'card2': '02_React',
+  'card3': '03_TensorFlow',
+  'card4': '04_AutoGPT',
+  'card5': '05_n8n',
+  'card6': '06_VSCode',
+  'card7': '07_Flutter',
+  'card8': '08_Linux',
+  'card9': '09_OhMyZsh',
+  'card10': '10_ClawCode'
+};
+
+async function downloadCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const ctrl = document.getElementById('ctrlBar');
+  ctrl.style.display = 'none';
+  try {
+    const canvas = await html2canvas(el, {
+      scale: 2, useCORS: true, allowTaint: true,
+      backgroundColor: '#0f172a', scrollX: 0, scrollY: 0,
+    });
+    // Precision crop to 1242x1660 (eliminates black edges)
+    const out = document.createElement('canvas');
+    const W = 1242 * 2, H = 1660 * 2;
+    out.width = W; out.height = H;
+    const ctx = out.getContext('2d');
+    ctx.drawImage(canvas, 0, 0, W, H, 0, 0, W, H);
+    const link = document.createElement('a');
+    link.download = 'GitHub2026_' + cardNames[id] + '.png';
+    link.href = out.toDataURL('image/png', 1.0);
+    link.click();
+  } catch (err) {
+    console.error('Download error:', err);
+    alert('Download failed: ' + err.message);
+  } finally {
+    ctrl.style.display = 'flex';
+  }
+}
+
+async function downloadAll() {
+  for (let i = 0; i < cardIds.length; i++) {
+    await downloadCard(cardIds[i]);
+    if (i < cardIds.length - 1) await new Promise(r => setTimeout(r, 800));
+  }
+  alert('Done! All 11 cards downloaded.');
+}
+</script>
+
+</body>
+</html>
