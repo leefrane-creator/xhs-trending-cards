@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1242, initial-scale=1.0">
+<title>{{PAGE_TITLE}} - 小红书卡片</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex; flex-direction: column;
+    align-items: center; padding: 30px 20px 60px;
+    font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+    gap: 36px;
+  }
+  /* ===== Control Bar ===== */
+  .controls {
+    position: sticky; top: 0; z-index: 1000;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 16px; padding: 18px 24px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    box-shadow: 0 8px 32px rgba(0,200,255,0.15);
+    border: 1px solid rgba(0,200,255,0.15); width: 1242px;
+  }
+  .controls h2 {
+    font-size: 17px; font-weight: 700;
+    background: linear-gradient(90deg, #00d4ff, #7c3aed);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+  .btn {
+    padding: 10px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-download-all { background: linear-gradient(135deg, #00d4ff, #7c3aed); color: #fff; box-shadow: 0 4px 20px rgba(0,212,255,0.3); }
+  .btn-download-all:hover { transform: translateY(-2px); }
+  .btn-single { background: rgba(255,255,255,0.08); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+  .btn-single:hover { background: rgba(0,212,255,0.15); }
+
+  /* ===== Card Container ===== */
+  .card-wrapper { position: relative; }
+
+  /* ★★★ CSS Grid 3-Row Layout (Core) ★★★ */
+  .card {
+    width: 1242px; height: 1660px;
+    background: #0f172a; border-radius: 24px; overflow: hidden;
+    display: grid;
+    grid-template-rows: 12px 1fr auto;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+  }
+
+  /* Row 1: Top theme bar - fixed 12px */
+  .top-bar { width: 100%; height: 12px; background: var(--theme); }
+
+  /* Row 2: Main area - space-between for even distribution */
+  .main {
+    display: flex; flex-direction: column;
+    padding: 44px 56px 10px 56px;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  /* Row 3: CTA button area - natural height */
+  .btn-area { padding: 8px 56px 40px 56px; }
+  .cta-btn {
+    width: 100%; height: 86px;
+    background: var(--theme); color: #fff;
+    font-size: 44px; font-weight: 700;
+    border: none; border-radius: 43px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    letter-spacing: 4px;
+  }
+
+  /* ========== Cover Card ========== */
+  .cover-header { text-align: center; }
+  .cover-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00d4ff, #7c3aed);
+    color: #fff; padding: 12px 32px; border-radius: 30px;
+    font-size: 28px; font-weight: 800; letter-spacing: 3px; margin-bottom: 18px;
+    box-shadow: 0 4px 24px rgba(0,212,255,0.35);
+  }
+  .cover-title {
+    font-size: 88px; font-weight: 800; line-height: 1.15;
+    background: linear-gradient(90deg, #00d4ff, #a78bfa, #f472b6, #00d4ff);
+    background-size: 300% 100%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .cover-subtitle { font-size: 38px; color: #94a3b8; letter-spacing: 2px; }
+
+  .project-list { display: flex; flex-direction: column; gap: 16px; }
+  .project-item {
+    display: flex; align-items: center; gap: 20px;
+    background: #1e293b; border-radius: 18px; padding: 22px 28px;
+    border-left: 6px solid var(--item-color, #00d4ff);
+  }
+  .project-rank {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; flex-shrink: 0;
+  }
+  .rank-1 { background: linear-gradient(135deg,#ffd700,#ffaa00); color: #000; }
+  .rank-2 { background: linear-gradient(135deg,#c0c0c0,#a0a0a0); color: #000; }
+  .rank-3 { background: linear-gradient(135deg,#cd7f32,#b8860b); color: #fff; }
+  .rank-other { background: #334155; color: #94a3b8; }
+  .project-info { flex: 1; min-width: 0; }
+  .project-name { font-size: 34px; font-weight: 800; color: #e2e8f0; }
+  .project-desc { font-size: 24px; color: #94a3b8; margin-top: 4px; }
+  .project-stars { font-size: 30px; font-weight: 800; flex-shrink: 0; white-space: nowrap; }
+  .stars-badge {
+    display: inline-block; padding: 8px 20px; border-radius: 24px;
+    font-size: 26px; font-weight: 800;
+  }
+  .cover-footer { text-align: center; padding-top: 18px; border-top: 1px solid #1e293b; }
+  .footer-text { font-size: 26px; color: #64748b; }
+  .footer-text span { color: #00d4ff; font-weight: 700; }
+
+  /* ========== Detail Card ========== */
+  .detail-header { text-align: center; }
+  .detail-rank {
+    display: inline-block; padding: 10px 32px; border-radius: 30px;
+    font-size: 28px; font-weight: 900; letter-spacing: 2px; margin-bottom: 16px;
+  }
+  .detail-project-name {
+    font-size: 90px; font-weight: 800; line-height: 1.08; word-break: break-word;
+    color: var(--theme);
+  }
+  .detail-url { font-size: 26px; color: #64748b; margin-top: 8px; font-family: 'SF Mono', Consolas, monospace; }
+  .detail-tag-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .detail-tag {
+    padding: 8px 22px; border-radius: 24px; font-size: 24px;
+    font-weight: 600; border: 1px solid; background: rgba(255,255,255,0.04);
+  }
+
+  .stats-row {
+    display: flex; justify-content: center; gap: 40px;
+    background: #1e293b; border-radius: 20px; padding: 26px 0;
+  }
+  .stat-item { text-align: center; }
+  .stat-value { font-size: 46px; font-weight: 900; }
+  .stat-label { font-size: 24px; color: #94a3b8; margin-top: 4px; }
+
+  .section-card {
+    background: #1e293b; border-radius: 20px; padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .sec-head { display: flex; align-items: center; gap: 14px; }
+  .sec-bar { width: 6px; height: 36px; background: var(--theme); border-radius: 3px; flex-shrink: 0; }
+  .sec-title { font-size: 38px; font-weight: 700; color: var(--theme); }
+  .section-card.gold .sec-bar { background: #fbbf24; }
+  .section-card.gold .sec-title { color: #fbbf24; }
+  .section-card.purple .sec-bar { background: #a78bfa; }
+  .section-card.purple .sec-title { color: #a78bfa; }
+  .sec-body { font-size: 30px; color: #cbd5e1; line-height: 1.55; padding-left: 20px; }
+
+  .feature-list { display: flex; flex-direction: column; gap: 14px; padding-left: 20px; }
+  .feature-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    font-size: 28px; line-height: 1.5; color: #e2e8f0;
+  }
+  .feature-dot {
+    width: 14px; height: 14px; min-width: 14px; border-radius: 50%;
+    background: var(--theme); margin-top: 12px; flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== CONTROL BAR ====== -->
+<div class="controls" id="ctrlBar">
+  <h2>{{CONTROL_TITLE}}</h2>
+  {{DOWNLOAD_BUTTONS}}
+</div>
+
+<!-- ============================================ -->
+<!--  CARD: COVER (replace this block per topic)   -->
+<!-- ============================================ -->
+<div class="card-wrapper">
+<div class="card" id="card0" style="--theme: linear-gradient(90deg, #00d4ff, #7c3aed);">
+  <div class="top-bar" style="background: {{TOP_BAR_GRADIENT}};"></div>
+  <div class="main">
+    <div class="cover-header">
+      <div class="cover-badge">{{COVER_BADGE}}</div>
+      <div class="cover-title">{{COVER_TITLE}}</div>
+      <div class="cover-subtitle">{{COVER_SUBTITLE}}</div>
+    </div>
+    <div class="project-list">{{PROJECT_LIST}}</div>
+    <div class="cover-footer">
+      <div class="cover-footer">{{COVER_FOOTER}}</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn" style="{{CTA_GRADIENT}}">{{CTA_COVER_TEXT}}</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!--  CARD: DETAIL TEMPLATE (duplicate per item)   -->
+<!-- ============================================ -->
+<!--
+<div class="card-wrapper">
+<div class="card" id="cardN" style="--theme: {{THEME_COLOR}};">
+  <div class="top-bar"></div>
+  <div class="main">
+    <div class="detail-header">
+      <div class="detail-rank" style="{{RANK_BG}};">{{RANK_LABEL}}</div>
+      <div class="detail-project-name">{{ITEM_NAME}}</div>
+      <div class="detail-url">{{ITEM_URL}}</div>
+      <div class="detail-tag-row">{{ITEM_TAGS}}</div>
+    </div>
+    <div class="stats-row">{{STATS_ROW}}</div>
+    <div class="section-card">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">项目简介</div></div>
+      <div class="sec-body">{{INTRO_TEXT}}</div>
+    </div>
+    <div class="section-card gold">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">为什么这么火？</div></div>
+      <div class="feature-list">{{FEATURE_LIST}}</div>
+    </div>
+    <div class="section-card purple">
+      <div class="sec-head"><div class="sec-bar"></div><div class="sec-title">适合谁用？</div></div>
+      <div class="sec-body">{{TARGET_AUDIENCE}}</div>
+    </div>
+  </div>
+  <div class="btn-area">
+    <div class="cta-btn">{{CTA_TEXT}}</div>
+  </div>
+</div>
+</div>
+-->
+
+<script>
+// ===== DOWNLOAD LOGIC (html2canvas + precision crop) =====
+const cardIds = [{{CARD_IDS_ARRAY}}];
+const cardNames = {{{CARD_NAMES_MAP}}};
+
+async function downloadCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const ctrl = document.getElementById('ctrlBar');
+  ctrl.style.display = 'none';
+  try {
+    const canvas = await html2canvas(el, {
+      scale: 2, useCORS: true, allowTaint: true,
+      backgroundColor: '#0f172a', scrollX: 0, scrollY: 0,
+    });
+    // Precision crop to 1242x1660 (eliminates black edges)
+    const out = document.createElement('canvas');
+    const W = 1242 * 2, H = 1660 * 2;
+    out.width = W; out.height = H;
+    const ctx = out.getContext('2d');
+    ctx.drawImage(canvas, 0, 0, W, H, 0, 0, W, H);
+    const link = document.createElement('a');
+    link.download = '{{FILE_PREFIX}}_' + cardNames[id] + '.png';
+    link.href = out.toDataURL('image/png', 1.0);
+    link.click();
+  } catch (err) {
+    console.error('Download error:', err);
+    alert('Download failed: ' + err.message);
+  } finally {
+    ctrl.style.display = 'flex';
+  }
+}
+
+async function downloadAll() {
+  for (let i = 0; i < cardIds.length; i++) {
+    await downloadCard(cardIds[i]);
+    if (i < cardIds.length - 1) await new Promise(r => setTimeout(r, 800));
+  }
+  alert('Done! All cards downloaded.');
+}
+</script>
+
+</body>
+</html>
