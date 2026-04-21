@@ -41,13 +41,28 @@
 - 卡片 HTML: [examples/03-ai-ppt-tools-top6/cards.html](examples/03-ai-ppt-tools-top6/cards.html)
 - 发布文案: [examples/03-ai-ppt-tools-top6/copywriting.md](examples/03-ai-ppt-tools-top6/copywriting.md)
 
-## 视觉特点
+### 案例4: Kimi K2.6 重磅发布（Apple/Mi 极简风格）
+2张卡片（1封面 + 1详情），纯黑底 + 白大字 + 月之暗面橙品牌色，适用于重磅产品发布
+- 风格：Style B - Apple/Mi 极简风格（纯黑#000 + 白大字 + #ff6b35橙重点色）
+- 卡片 HTML: [examples/04-kimi-k26-apple-style/cards.html](examples/04-kimi-k26-apple-style/cards.html)
+- 发布文案: [examples/04-kimi-k26-apple-style/copywriting.md](examples/04-kimi-k26-apple-style/copywriting.md)
 
-- **深色科技风** - 深邃海军蓝背景(#0f172a) + 鲜明主题色
-- **CSS Grid 三行布局** - 12px 主题色顶栏 + 弹性主内容区 + CTA按钮区，自适应无留白
-- **排名徽章系统** - 金/银/铜渐变徽章，视觉冲击力强
-- **信息层级清晰** - 左侧竖线色块区分模块(蓝/金/紫)，一眼扫完重点
-- **Retina 级输出** - html2canvas 2x 渲染 + 精确裁剪，输出 2484x3320 高清 PNG
+## 视觉风格（两种可选）
+
+### Style A: 深色科技风（默认）
+- 藏青底(#0f172a) + 卡片(#1e293b) + 多彩主题色
+- CSS Grid 三行布局：12px主题色顶栏 + 弹性主内容区 + CTA按钮区
+- 排名徽章系统：金/银/铜渐变徽章
+- 信息层级：左侧竖线色块区分模块（蓝/金/紫）
+
+### Style B: Apple/Mi 极简
+- 纯黑底(#000) + 纯白大字 + 橙品牌色(#ff6b35)点缀
+- 字号大、信息密、留白少（封面主标题148px+，统计数据64px）
+- 零emoji、无花哨装饰，克制用色，冲击力强
+- 适用场景：重磅发布、明星产品、冲击力海报
+
+### Retina 级输出
+html2canvas 2x 渲染 + 精确裁剪，输出 2484x3320 高清 PNG
 
 ## Quick Start
 
@@ -65,18 +80,19 @@ xhs-trending-cards/
 ├── SKILL.md                           # AI Agent Skill 定义
 ├── LICENSE                            # MIT 许可证
 ├── assets/
-│   └── card_template.html             # HTML 卡片模板(CSS Grid 布局)
+│   ├── card_template.html             # HTML 卡片模板 - Style A 深色科技风
+│   └── card_template_apple.html       # HTML 卡片模板 - Style B Apple/Mi 极简风
 ├── references/
 │   └── copywriting_guide.md           # 小红书文案写作指南
 └── examples/                          # 优秀案例
     ├── 01-github-ai-trending-top5/
-    │   ├── cards.html                 # 完整卡片 HTML
-    │   └── copywriting.md             # 对应发布文案
+    │   └── cards.html                 # Style A
     ├── 02-github-2026-top10-tools/
-    │   ├── cards.html
-    │   └── copywriting.md
-    └── 03-ai-ppt-tools-top6/
-        ├── cards.html
+    │   └── cards.html                 # Style A
+    ├── 03-ai-ppt-tools-top6/
+    │   └── cards.html                 # Style A
+    └── 04-kimi-k26-apple-style/
+        ├── cards.html                 # Style B Apple/Mi 极简
         └── copywriting.md
 ```
 
@@ -115,6 +131,8 @@ xhs-trending-cards/
 
 ## Color Palette
 
+### Style A: 深色科技风
+
 ```
 Background:        #0f172a (深海军蓝)
 Card inner:        #1e293b (石板灰)
@@ -136,6 +154,17 @@ Stars 徽章:        background #fef3c7, color #92400e
 排名 #2:           gradient(#c0c0c0, #a0a0a0) bg, 黑色字
 排名 #3:           gradient(#cd7f32, #b8860b) bg, 白色字
 排名 4+:           #334155 bg, 弱化字
+```
+
+### Style B: Apple/Mi 极简
+
+```
+Background:        #000000 (纯黑)
+Text primary:      #ffffff (纯白)
+Brand primary:      #ff6b35 (月之暗面橙)
+Brand secondary:   #ff9500 / #ffd600 (二级强调)
+Text muted:        #555555
+Border/dot:        #1a1a1a / #222222
 ```
 
 ## Typography Scale (1242x1660px)
